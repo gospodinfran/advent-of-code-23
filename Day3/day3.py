@@ -95,7 +95,6 @@ for i in range(len(lines)):
         while j+nr_digits < len(lines[0]) and lines[i][j+nr_digits].isnumeric():
             nr_digits += 1
 
-        # Top left corner
         part_num = check_all_positions(lines, i, j)
 
         if part_num:
