@@ -4,6 +4,75 @@ lines = file.readlines()
 for i in range(len(lines)):
     lines[i] = lines[i].strip()
 
+
+def check_up(lines, i, j):
+    if i - 1 < 0:
+        return False
+    c = lines[i-1][j]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_right(lines, i, j):
+    if j + 1 > len(lines[0]) - 1:
+        return False
+    c = lines[i][j+1]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_left(lines, i, j):
+    if j - 1 < 0:
+        return False
+    c = lines[i][j-1]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_down(lines, i, j):
+    if i + 1 > len(lines) - 1:
+        return False
+    c = lines[i+1][j]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_top_left(lines, i, j):
+    if i - 1 < 0 or j - 1 < 0:
+        return False
+    c = lines[i-1][j-1]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_top_right(lines, i, j):
+    if i - 1 < 0 or j + 1 > len(lines[0]) - 1:
+        return False
+    c = lines[i-1][j+1]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_bottom_left(lines, i, j):
+    if i + 1 > len(lines) - 1 or j - 1 < 0:
+        return False
+    c = lines[i+1][j-1]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_bottom_right(lines, i, j):
+    if i + 1 > len(lines) - 1 or j + 1 > len(lines[0]) - 1:
+        return False
+    c = lines[i+1][j+1]
+    if (not c.isnumeric() and c != '.'):
+        return True
+
+
+def check_all_positions(lines, i, j):
+    return check_up(lines, i, j) or check_down(lines, i, j) or check_left(lines, i, j) or check_right(lines, i, j) or check_top_left(lines, i, j) or check_top_right(lines, i, j) or check_bottom_left(lines, i, j) or check_bottom_right(lines, i, j)
+
+
 part_nums = []
 skip = 0
 
@@ -26,43 +95,8 @@ for i in range(len(lines)):
         while j+nr_digits < len(lines[0]) and lines[i][j+nr_digits].isnumeric():
             nr_digits += 1
 
-        part_num = False
-        rows, cols = len(lines), len(lines[0])
         # Top left corner
-        if i == 0 and j == 0:
-            if (not lines[i+1][j].isnumeric() and lines[i+1][j] != '.') or (not lines[i+1][j+1].isnumeric() and lines[i+1][j+1] != '.'):
-                part_num = True
-        # Top right corner
-        elif i == 0 and j == cols-1:
-            if (not lines[i+1][j].isnumeric() and lines[i+1][j] != '.') or (not lines[i+1][j-1].isnumeric() and lines[i+1][j-1] != '.'):
-                part_num = True
-        # Top edge, not corner
-        elif i == 0:
-            if (not lines[i+1][j].isnumeric() and lines[i+1][j] != '.') or (not lines[i][j-1].isnumeric() and lines[i][j-1] != '.') or (not lines[i][j+1].isnumeric() and lines[i][j+1] != '.') or (not lines[i+1][j+1].isnumeric() and lines[i+1][j+1] != '.') or (not lines[i+1][j-1].isnumeric() and lines[i+1][j-1] != '.'):
-                part_num = True
-        # Bottom left corner
-        elif i == rows-1 and j == 0:
-            if (not lines[i-1][j].isnumeric() and lines[i-1][j] != '.') or (not lines[i-1][j+1].isnumeric() and lines[i-1][j+1] != '.'):
-                part_num = True
-        # Bottom right corner
-        elif i == rows-1 and j == cols-1:
-            if (not lines[i-1][j].isnumeric() and lines[i-1][j] != '.') or (not lines[i-1][j-1].isnumeric() and lines[i-1][j-1] != '.'):
-                part_num = True
-        # Bottom edge, not corner
-        elif i == rows-1:
-            if (not lines[i-1][j].isnumeric() and lines[i-1][j] != '.') or (not lines[i][j-1].isnumeric() and lines[i][j-1] != '.') or (not lines[i][j+1].isnumeric() and lines[i][j+1] != '.') or (not lines[i-1][j+1].isnumeric() and lines[i-1][j+1] != '.') or (not lines[i-1][j-1].isnumeric() and lines[i-1][j-1] != '.'):
-                part_num = True
-        # Left edge
-        elif j == 0:
-            if (not lines[i][j+1].isnumeric() and lines[i][j+1] != '.') or (not lines[i-1][j+1].isnumeric() and lines[i-1][j+1] != '.') or (not lines[i+1][j+1].isnumeric() and lines[i+1][j+1] != '.'):
-                part_num = True
-        # Right edge
-        elif j == cols-1:
-            if (not lines[i][j-1].isnumeric() and lines[i][j-1] != '.') or (not lines[i-1][j-1].isnumeric() and lines[i-1][j-1] != '.') or (not lines[i+1][j-1].isnumeric() and lines[i+1][j-1] != '.'):
-                part_num = True
-        else:
-            if (not lines[i-1][j].isnumeric() and lines[i-1][j] != '.') or (not lines[i+1][j].isnumeric() and lines[i+1][j] != '.') or (not lines[i][j-1].isnumeric() and lines[i][j-1] != '.') or (not lines[i][j+1].isnumeric() and lines[i][j+1] != '.') or (not lines[i-1][j-1].isnumeric() and lines[i-1][j-1] != '.') or (not lines[i-1][j+1].isnumeric() and lines[i-1][j+1] != '.') or (not lines[i+1][j-1].isnumeric() and lines[i+1][j-1] != '.') or (not lines[i+1][j+1].isnumeric() and lines[i+1][j+1] != '.'):
-                part_num = True
+        part_num = check_all_positions(lines, i, j)
 
         if part_num:
             start, end = j, j
